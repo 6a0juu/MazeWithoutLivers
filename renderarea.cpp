@@ -54,8 +54,6 @@
 #include "maze.h"
 #include "window.h"
 
-extern int path[300];
-
 //! [0]
 RenderArea::RenderArea(QWidget *parent)
     : QWidget(parent)
