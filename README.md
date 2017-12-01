@@ -1,7 +1,5 @@
 # MazeWithoutLivers
 
----
-
 ## 吐槽
 
 （最终还是把C++写成了C with class and STL （逃
