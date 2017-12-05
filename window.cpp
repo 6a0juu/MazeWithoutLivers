@@ -101,7 +101,7 @@ Window::Window()
     penWidthSpinBox = new QSpinBox;
     penWidthSpinBox->setRange(2, 10);
 
-    penWidthLabel = new QLabel(tr("Additional Size:"));
+    penWidthLabel = new QLabel(tr("Block Size:"));
     penWidthLabel->setBuddy(penWidthSpinBox);
 //! [2]
 
@@ -229,9 +229,9 @@ void Window::saveMaze()
 void Window::formMaze(void)
 {
     QString t1 = xEdit->text();
-    mazeX = t1.toInt() * 2;
+    mazeX = (t1.toInt() >> 1) << 1;
     QString t2 = yEdit->text();
-    mazeY = t2.toInt() * 2;
+    mazeY = (t2.toInt() >> 1) << 1;
     maze->mazeGen(mazeX / 2, mazeY / 2, 1, 1);
     renderArea->setGeometry(0, 0, 27 + penWidthSpinBox->value() * mazeX, 27 + penWidthSpinBox->value() * mazeY);
     scrollArea->setGeometry(0, 0, std::min(1200, 30 + penWidthSpinBox->value() * mazeX), std::min(700, 30 + penWidthSpinBox->value() * mazeY));
@@ -240,10 +240,15 @@ void Window::formMaze(void)
 
 void Window::solvMaze(void)
 {
-    QString t1 = stXEdit->text();
-    QString t2 = stYEdit->text();
-    QString t3 = edXEdit->text();
-    QString t4 = edYEdit->text();
-    maze->findPath(t1.toInt(), t2.toInt(), t3.toInt(), t4.toInt());
+    int t1 = stXEdit->text().toInt(),t2 = stYEdit->text().toInt(),t3 = edXEdit->text().toInt(),t4 = edYEdit->text().toInt();
+    if (t1 < 1) t1 = 1;
+    else if (t1 >= mazeX) t1 = mazeX - 1;
+    if (t3 < 1) t3 = 1;
+    else if (t3 >= mazeX) t3 = mazeX - 1;
+    if (t2 < 1) t2 = 1;
+    else if (t2 >= mazeY) t2 = mazeY - 1;
+    if (t4 < 1) t4 = 1;
+    else if (t4 >= mazeY) t4 = mazeY - 1;
+    maze->findPath(t1, t2, t3, t4);
     renderArea->renderMaze(maze, mazeX, mazeY);
 }
